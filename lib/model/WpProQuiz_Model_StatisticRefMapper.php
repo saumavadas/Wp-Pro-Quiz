@@ -183,6 +183,8 @@ class WpProQuiz_Model_StatisticRefMapper extends WpProQuiz_Model_Mapper
 
             $refId = $this->_wpdb->insert_id;
         }
+        
+        do_action('iits_WPPROQUIZ_statistic_saved', $refId,  $statisticRefModel->getQuizId()); #added By Saumava
 
         foreach ($statisticModel as $d) {
             $answerData = $d->getAnswerData() === null ? 'NULL' : $this->_wpdb->prepare('%s',

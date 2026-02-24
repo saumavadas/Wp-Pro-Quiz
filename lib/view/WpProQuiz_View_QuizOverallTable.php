@@ -66,9 +66,17 @@ class WpProQuiz_View_QuizOverallTable extends WP_List_Table
 
     function column_name($item)
     {
-        $actions = array(
-            'wpProQuiz_questions' => sprintf('<a href="?page=wpProQuiz&module=question&quiz_id=%s">' . __('Questions',
-                    'wp-pro-quiz') . '</a>', $item['ID']),
+        $n=rand(0, 100); #TODO: Should be replaced by the no of questions. SAUMAVA Addition
+        $actions = array();
+
+        // 1. Add the ID column (this will appear in row actions)
+        $actions['wpProQuiz_questions_ID'] = sprintf(__('ID: %d', 'wp-pro-quiz'), $item['ID']);
+
+        // 2. Add the "Questions (X)" link
+        $actions['wpProQuiz_questions'] = sprintf(
+            '<a href="?page=wpProQuiz&module=question&quiz_id=%d">' . __('Questions (%d)', 'wp-pro-quiz') . '</a>',
+            $item['ID'],
+            $n
         );
 
         if (current_user_can('wpProQuiz_edit_quiz')) {
@@ -94,6 +102,8 @@ class WpProQuiz_View_QuizOverallTable extends WP_List_Table
             $actions['wpProQuiz_leaderboard'] = sprintf('<a href="?page=wpProQuiz&module=toplist&id=%s">' . __('Leaderboard',
                     'wp-pro-quiz') . '</a>', $item['ID']);
         }
+
+        error_log(print_r($actions, 1));
 
         return sprintf('<a class="row-title" href="?page=wpProQuiz&module=question&quiz_id=%1$s">%2$s</a> %3$s',
             $item['ID'], $item['name'], $this->row_actions($actions));
